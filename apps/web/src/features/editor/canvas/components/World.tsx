@@ -1,5 +1,5 @@
 "use client";
-
+import { Grid } from "./Grid";
 import { Group, Layer, Rect } from "react-konva";
 
 import {
@@ -21,21 +21,23 @@ export function World({
   );
 
   return (
-    <Layer>
-      <Group
-        x={camera.x}
-        y={camera.y}
-        scaleX={camera.zoom}
-        scaleY={camera.zoom}
-      >
-        <Rect
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          fill="white"
-        />
+<Layer>
+  <Grid />
 
-        {children}
-      </Group>
-    </Layer>
+  <Group
+    x={camera.x}
+    y={camera.y}
+    scaleX={camera.zoom}
+    scaleY={camera.zoom}
+  >
+    <Rect
+      width={CANVAS_WIDTH}
+      height={CANVAS_HEIGHT}
+      fill="white"
+    />
+
+    {children}
+  </Group>
+</Layer>
   );
 }
