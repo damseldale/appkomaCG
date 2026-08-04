@@ -1,59 +1,56 @@
 "use client";
 
-import { Text } from "react-konva";
+import type { SceneObject } from "@/features/objects";
 
-import type { SceneObject } from "../../objects";
+import {
+  CharacterRenderer,
+  GroupRenderer,
+  ImageRenderer,
+  ShapeRenderer,
+  TextRenderer,
+} from "./renderers";
 
-interface ObjectRendererProps {
+interface Props {
   object: SceneObject;
 }
 
 export function ObjectRenderer({
   object,
-}: ObjectRendererProps) {
+}: Props) {
   switch (object.type) {
-    case "text":
+    case "character":
       return (
-        <Text
-          x={object.transform.x}
-          y={object.transform.y}
-          text={object.text}
-          fontSize={object.fontSize}
-          fontFamily={object.fontFamily}
-        />
-      );
-
-    case "shape":
-      return (
-        <Text
-          x={object.transform.x}
-          y={object.transform.y}
-          text={`Shape (${object.shape})`}
+        <CharacterRenderer
+          object={object}
         />
       );
 
     case "image":
       return (
-        <Text
-          x={object.transform.x}
-          y={object.transform.y}
-          text="Image"
+        <ImageRenderer
+          object={object}
         />
       );
 
-    case "character":
+    case "text":
       return (
-        <Text
-          x={object.transform.x}
-          y={object.transform.y}
-          text="Character"
+        <TextRenderer
+          object={object}
+        />
+      );
+
+    case "shape":
+      return (
+        <ShapeRenderer
+          object={object}
         />
       );
 
     case "group":
-      return null;
-
-    default:
-      return null;
+      return (
+        <GroupRenderer
+          object={object}
+        />
+      );
   }
 }
