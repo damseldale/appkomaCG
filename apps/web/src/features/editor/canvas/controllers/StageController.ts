@@ -1,42 +1,74 @@
-import type { KonvaEventObject } from "konva/lib/Node";
-import type { WheelEvent } from "react";
+import type {
+    KonvaEventObject,
+} from "konva/lib/Node";
 
-import { zoomAtPoint } from "../engine/zoom";
-import { useCanvasStore } from "../store";
+import type {
+    WheelEvent,
+} from "react";
 
-export interface StageController {
-  onWheel(
-    event: KonvaEventObject<WheelEvent>,
-  ): void;
+import {
+    zoomAtPointer,
+} from "../engine/zoom";
+
+import {
+    useCanvasStore,
+} from "../store";
+
+export interface StageController{
+
+    onWheel(
+        e:KonvaEventObject<WheelEvent>,
+    ):void;
+
 }
 
-export function createStageController(): StageController {
-  return {
-    onWheel(event) {
-      event.evt.preventDefault();
+export function createStageController()
+:StageController{
 
-      const stage = event.target.getStage();
+    return{
 
-      if (!stage) {
-        return;
-      }
+        onWheel(e){
 
-      const pointer = stage.getPointerPosition();
+            e.evt.preventDefault();
 
-      if (!pointer) {
-        return;
-      }
+            const stage=
+                e.target.getStage();
 
-      const { camera, setCamera } =
-        useCanvasStore.getState();
+            if(!stage)return;
 
-      const result = zoomAtPoint(
-        camera,
-        pointer,
-        event.evt.deltaY,
-      );
+            const pointer=
+                stage.getPointerPosition();
 
-      setCamera(result.camera);
-    },
-  };
+            if(!pointer)return;
+
+            const store=
+                useCanvasStore.getState();
+
+            const result=
+                zoomAtPointer(
+
+                    {
+
+                        camera:
+                            store.camera,
+
+                        viewport:
+                            store.viewport,
+
+                    },
+
+                    pointer,
+
+                    e.evt.deltaY,
+
+                );
+
+            store.setCamera(
+                result.camera,
+            );
+
+        },
+
+    };
+
 }
