@@ -1,25 +1,13 @@
 "use client";
 
-import { Fragment } from "react";
+import { useEffect } from "react";
 
-import { useSceneObjects } from "../selectors";
-
-import { ObjectRenderer } from "./ObjectRenderer";
+import { bootstrapRenderers } from "./bootstrap";
 
 export function SceneRenderer() {
-  const objects = useSceneObjects();
+    useEffect(() => {
+        bootstrapRenderers();
+    }, []);
 
-  return (
-    <>
-      {objects.map((object) => (
-        <Fragment
-          key={object.id}
-        >
-          <ObjectRenderer
-            object={object}
-          />
-        </Fragment>
-      ))}
-    </>
-  );
+    ...
 }
