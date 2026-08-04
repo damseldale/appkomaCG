@@ -2,13 +2,16 @@
 
 import { create } from "zustand";
 
-import type { EditorState } from "../types/editor";
+import type {
+  EditorState,
+  EditorTool,
+} from "./types";
 
 interface EditorActions {
+  setTool(tool: EditorTool): void;
+
   setCamera(
-    x: number,
-    y: number,
-    zoom: number,
+    camera: Partial<EditorState["camera"]>,
   ): void;
 
   setSelected(
@@ -16,23 +19,26 @@ interface EditorActions {
   ): void;
 
   setPlaying(
-    value: boolean,
+    playing: boolean,
   ): void;
 
   setCurrentFrame(
     frame: number,
   ): void;
+
+  toggleGrid(): void;
+
+  toggleSnap(): void;
 }
 
-export const useEditorStore = create<
-  EditorState &
-  EditorActions
->((set) => ({
+const initialState: EditorState = {
   camera: {
     x: 0,
     y: 0,
     zoom: 1,
   },
+
+  tool: "select",
 
   selectedId: null,
 
@@ -40,37 +46,51 @@ export const useEditorStore = create<
 
   currentFrame: 0,
 
-  setCamera: (
-    x,
-    y,
-    zoom,
-  ) =>
+  snap: true,
+
+  showGrid: true,
+};
+
+export const useEditorStore = create<
+  EditorState & EditorActions
+>((set) => ({
+  ...initialState,
+
+  setTool: (tool) =>
     set({
-      camera: {
-        x,
-        y,
-        zoom,
-      },
+      tool,
     }),
 
-  setSelected: (
-    id,
-  ) =>
+  setCamera: (camera) =>
+    set((state) => ({
+      camera: {
+        ...state.camera,
+        ...camera,
+      },
+    })),
+
+  setSelected: (id) =>
     set({
       selectedId: id,
     }),
 
-  setPlaying: (
-    value,
-  ) =>
+  setPlaying: (playing) =>
     set({
-      playing: value,
+      playing,
     }),
 
-  setCurrentFrame: (
-    frame,
-  ) =>
+  setCurrentFrame: (frame) =>
     set({
       currentFrame: frame,
     }),
+
+  toggleGrid: () =>
+    set((state) => ({
+      showGrid: !state.showGrid,
+    })),
+
+  toggleSnap: () =>
+    set((state) => ({
+      snap: !state.snap,
+    })),
 }));
