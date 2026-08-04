@@ -6,11 +6,13 @@ export const metadata: Metadata = {
   description: "Professional Animation Editor",
 };
 
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode;
+}>;
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: RootLayoutProps) {
   return (
     <html lang="id">
       <body>{children}</body>
