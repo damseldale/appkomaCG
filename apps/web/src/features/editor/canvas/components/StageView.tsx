@@ -13,8 +13,16 @@ export function StageView() {
 
   return (
     <Stage
+      onWheel={(event) => {
+  event.evt.preventDefault();
+
+  // batch pertama:
+  // baca posisi pointer
+  // panggil zoomAt()
+}}
       width={viewport.width}
       height={viewport.height}
+      
     >
       <World />
     </Stage>
