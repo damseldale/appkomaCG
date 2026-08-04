@@ -1,5 +1,5 @@
 "use client";
-
+import { useEditorStore } from "../store/editorStore";
 import {
   Download,
   MousePointer2,
@@ -8,6 +8,14 @@ import {
   Save,
   Undo2,
 } from "lucide-react";
+
+const playing = useEditorStore(
+    (state) => state.playing,
+);
+
+const setPlaying = useEditorStore(
+    (state) => state.setPlaying,
+);
 
 const tools = [
   {
