@@ -1,25 +1,25 @@
 "use client";
 
+import { Canvas } from "./Canvas";
 import { Inspector } from "./Inspector";
 import { Sidebar } from "./Sidebar";
+import { Timeline } from "./Timeline";
 import { Toolbar } from "./Toolbar";
 
 export function Workspace() {
   return (
-    <div className="flex h-screen w-screen flex-col bg-neutral-950 text-white">
+    <div className="flex h-screen flex-col bg-neutral-950 text-white">
       <Toolbar />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         <Sidebar />
 
-        <main className="flex flex-1 items-center justify-center bg-neutral-950">
-          <div className="rounded-lg border border-dashed border-neutral-700 p-12">
-            Canvas Placeholder
-          </div>
-        </main>
+        <Canvas />
 
         <Inspector />
       </div>
+
+      <Timeline />
     </div>
   );
 }
