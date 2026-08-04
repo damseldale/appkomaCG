@@ -19,11 +19,14 @@ export function StageView() {
   }
 
   return (
-    <Stage
-      width={viewport.width}
-      height={viewport.height}
-      onWheel={controller.onWheel}
-    >
+   <Stage
+  width={viewport.width}
+  height={viewport.height}
+  onWheel={controller.onWheel}
+  onMouseDown={controller.onMouseDown}
+  onMouseMove={controller.onMouseMove}
+  onMouseUp={controller.onMouseUp}
+/>
       <GridLayer />
 
       <WorldLayer />
