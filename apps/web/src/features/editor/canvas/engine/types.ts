@@ -11,6 +11,6 @@ export interface Viewport {
 }
 
 export interface CameraContext {
-  viewport: Viewport;
   camera: CameraState;
+  viewport: Viewport;
 }
