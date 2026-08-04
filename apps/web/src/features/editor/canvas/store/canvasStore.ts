@@ -18,6 +18,7 @@ interface CanvasActions {
   ): void;
 
   resetCamera(): void;
+  zoomAt(pointerX: number, pointerY: number, delta: number): void;
 }
 
 const initialCamera: CameraState = {
@@ -35,6 +36,7 @@ export const useCanvasStore = create<
   },
 
   camera: initialCamera,
+ 
 
   setViewport: (viewport) =>
     set({
@@ -46,6 +48,7 @@ export const useCanvasStore = create<
       camera: {
         ...state.camera,
         ...camera,
+        
       },
     })),
 
