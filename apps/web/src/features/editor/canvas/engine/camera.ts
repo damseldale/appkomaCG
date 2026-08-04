@@ -1,23 +1,34 @@
-import type { CameraState } from "../store";
+import type {
+  CameraContext,
+  Point,
+} from "./types";
 
-export function worldToScreen(
-  x: number,
-  y: number,
-  camera: CameraState,
-) {
+export function screenToWorld(
+  context: CameraContext,
+  point: Point,
+): Point {
   return {
-    x: (x + camera.x) * camera.zoom,
-    y: (y + camera.y) * camera.zoom,
+    x:
+      (point.x - context.camera.x) /
+      context.camera.zoom,
+
+    y:
+      (point.y - context.camera.y) /
+      context.camera.zoom,
   };
 }
 
-export function screenToWorld(
-  x: number,
-  y: number,
-  camera: CameraState,
-) {
+export function worldToScreen(
+  context: CameraContext,
+  point: Point,
+): Point {
   return {
-    x: x / camera.zoom - camera.x,
-    y: y / camera.zoom - camera.y,
+    x:
+      point.x * context.camera.zoom +
+      context.camera.x,
+
+    y:
+      point.y * context.camera.zoom +
+      context.camera.y,
   };
 }
