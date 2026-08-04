@@ -2,23 +2,28 @@
 
 import { create } from "zustand";
 
-import type {
-  CameraState,
-  CanvasState,
-  ViewportState,
-} from "./types";
+export interface ViewportState {
+  width: number;
+  height: number;
+}
+
+export interface CameraState {
+  x: number;
+  y: number;
+  zoom: number;
+}
+
+export interface CanvasState {
+  viewport: ViewportState;
+  camera: CameraState;
+}
 
 interface CanvasActions {
-  setViewport(
-    viewport: ViewportState,
-  ): void;
+  setViewport(viewport: ViewportState): void;
 
-  setCamera(
-    camera: Partial<CameraState>,
-  ): void;
+  setCamera(camera: Partial<CameraState>): void;
 
   resetCamera(): void;
-  zoomAt(pointerX: number, pointerY: number, delta: number): void;
 }
 
 const initialCamera: CameraState = {
@@ -36,7 +41,6 @@ export const useCanvasStore = create<
   },
 
   camera: initialCamera,
- 
 
   setViewport: (viewport) =>
     set({
@@ -48,7 +52,6 @@ export const useCanvasStore = create<
       camera: {
         ...state.camera,
         ...camera,
-        
       },
     })),
 
