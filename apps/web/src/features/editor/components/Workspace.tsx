@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas } from "./Canvas";
+import { Canvas } from "@/features/editor/canvas/components/Canvas";
 import { Inspector } from "./Inspector";
 import { Sidebar } from "./Sidebar";
 import { Timeline } from "./Timeline";
