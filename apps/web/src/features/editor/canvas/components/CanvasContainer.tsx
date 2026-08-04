@@ -1,39 +1,33 @@
 "use client";
 
-import {
-    PropsWithChildren,
-    useRef,
-} from "react";
+import { PropsWithChildren, useEffect, useRef } from "react";
 
-import { useResizeObserver }
-from "../hooks/useResizeObserver";
+import { useResizeObserver } from "../hooks/useResizeObserver";
+import { useCanvasStore } from "../store";
 
-interface Props
-extends PropsWithChildren {}
+interface CanvasContainerProps extends PropsWithChildren {}
 
 export function CanvasContainer({
-    children,
-}: Props) {
+  children,
+}: CanvasContainerProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
-    const ref =
-        useRef<HTMLDivElement>(null);
+  const size = useResizeObserver(ref);
 
-    const size =
-        useResizeObserver(ref);
+  const setViewport = useCanvasStore(
+    (state) => state.setViewport,
+  );
 
-    return (
-        <div
-            ref={ref}
-            className="
-            flex-1
-            overflow-hidden
-            relative
-            "
-        >
+  useEffect(() => {
+    setViewport(size);
+  }, [size, setViewport]);
 
-            {size.width > 0 &&
-                children}
-
-        </div>
-    );
+  return (
+    <div
+      ref={ref}
+      className="relative flex-1 overflow-hidden"
+    >
+      {size.width > 0 && children}
+    </div>
+  );
 }
