@@ -1,15 +1,24 @@
 import type {
+  CharacterObject,
+  ImageObject,
   SceneObject,
+  TextObject,
 } from "./types";
 
-export function isLocked(
+export function isCharacter(
   object: SceneObject,
-) {
-  return object.locked;
+): object is CharacterObject {
+  return object.type === "character";
 }
 
-export function isVisible(
+export function isImage(
   object: SceneObject,
-) {
-  return object.visible;
+): object is ImageObject {
+  return object.type === "image";
+}
+
+export function isText(
+  object: SceneObject,
+): object is TextObject {
+  return object.type === "text";
 }
