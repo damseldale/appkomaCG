@@ -7,12 +7,9 @@ export interface ZoomResult {
 }
 
 export function zoomAtPoint(
-  camera: CameraState,
-  pointer: {
-    x: number;
-    y: number;
-  },
-  deltaY: number,
+    context: CameraContext,
+    pointer: Point,
+    deltaY: number,
 ): ZoomResult {
   const zoomFactor = deltaY < 0 ? 1.1 : 0.9;
 
