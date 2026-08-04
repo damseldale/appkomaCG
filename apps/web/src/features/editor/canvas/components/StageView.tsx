@@ -2,29 +2,33 @@
 
 import { Stage } from "react-konva";
 
-import { World } from "./World";
-
+import { useStageController } from "../hooks/useStageController";
 import { useCanvasStore } from "../store";
 
+import { GridLayer } from "./GridLayer";
+import { OverlayLayer } from "./OverlayLayer";
+import { WorldLayer } from "./WorldLayer";
+
 export function StageView() {
-  const viewport = useCanvasStore(
-    (state) => state.viewport,
-  );
+  const viewport = useCanvasStore((state) => state.viewport);
+
+  const controller = useStageController();
+
+  if (viewport.width === 0 || viewport.height === 0) {
+    return null;
+  }
 
   return (
     <Stage
-      onWheel={(event) => {
-  event.evt.preventDefault();
-
-  // batch pertama:
-  // baca posisi pointer
-  // panggil zoomAt()
-}}
       width={viewport.width}
       height={viewport.height}
-      
+      onWheel={controller.onWheel}
     >
-      <World />
+      <GridLayer />
+
+      <WorldLayer />
+
+      <OverlayLayer />
     </Stage>
   );
 }
