@@ -2,30 +2,35 @@ import type { ComponentType } from "react";
 
 import type { SceneObject } from "@/features/objects";
 
-import {
-    CharacterRenderer,
-    GroupRenderer,
-    ImageRenderer,
-    ShapeRenderer,
-    TextRenderer,
-} from "./renderers";
-
-type Renderer<T extends SceneObject = SceneObject> =
+export type ObjectRendererComponent =
     ComponentType<{
-        object: T;
+        object: SceneObject;
     }>;
 
-export const rendererRegistry = {
-    character: CharacterRenderer,
-
-    image: ImageRenderer,
-
-    text: TextRenderer,
-
-    shape: ShapeRenderer,
-
-    group: GroupRenderer,
-} satisfies Record<
+const registry = new Map<
     SceneObject["type"],
-    Renderer
->;
+    ObjectRendererComponent
+>();
+
+export function registerRenderer(
+    type: SceneObject["type"],
+    renderer: ObjectRendererComponent,
+) {
+    registry.set(type, renderer);
+}
+
+export function getRenderer(
+    type: SceneObject["type"],
+) {
+    return registry.get(type);
+}
+
+export function hasRenderer(
+    type: SceneObject["type"],
+) {
+    return registry.has(type);
+}
+
+export function clearRendererRegistry() {
+    registry.clear();
+}
