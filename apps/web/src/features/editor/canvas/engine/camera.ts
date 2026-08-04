@@ -1,34 +1,66 @@
-import type {
-  CameraContext,
-  Point,
-} from "./types";
+import type { CameraState } from "../store";
+import type { CameraContext, Point } from "./types";
 
-export function screenToWorld(
-  context: CameraContext,
-  point: Point,
-): Point {
+export interface CameraBounds {
+  minZoom: number;
+  maxZoom: number;
+}
+
+export const DEFAULT_CAMERA_BOUNDS: CameraBounds = {
+  minZoom: 0.1,
+  maxZoom: 10,
+};
+
+export function createCamera(): CameraState {
   return {
-    x:
-      (point.x - context.camera.x) /
-      context.camera.zoom,
-
-    y:
-      (point.y - context.camera.y) /
-      context.camera.zoom,
+    x: 0,
+    y: 0,
+    zoom: 1,
   };
 }
 
-export function worldToScreen(
+export function cloneCamera(
+  camera: CameraState,
+): CameraState {
+  return {
+    x: camera.x,
+    y: camera.y,
+    zoom: camera.zoom,
+  };
+}
+
+export function translateCamera(
+  camera: CameraState,
+  delta: Point,
+): CameraState {
+  return {
+    ...camera,
+    x: camera.x + delta.x,
+    y: camera.y + delta.y,
+  };
+}
+
+export function setCameraZoom(
+  camera: CameraState,
+  zoom: number,
+  bounds: CameraBounds = DEFAULT_CAMERA_BOUNDS,
+): CameraState {
+  const clampedZoom = Math.max(
+    bounds.minZoom,
+    Math.min(bounds.maxZoom, zoom),
+  );
+
+  return {
+    ...camera,
+    zoom: clampedZoom,
+  };
+}
+
+export function getViewportCenter(
   context: CameraContext,
-  point: Point,
 ): Point {
   return {
-    x:
-      point.x * context.camera.zoom +
-      context.camera.x,
-
-    y:
-      point.y * context.camera.zoom +
-      context.camera.y,
+    x: context.viewport.width / 2,
+    y: context.viewport.height / 2,
   };
 }
