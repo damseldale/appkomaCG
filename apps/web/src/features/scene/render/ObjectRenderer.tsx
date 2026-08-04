@@ -2,55 +2,23 @@
 
 import type { SceneObject } from "@/features/objects";
 
-import {
-  CharacterRenderer,
-  GroupRenderer,
-  ImageRenderer,
-  ShapeRenderer,
-  TextRenderer,
-} from "./renderers";
+import { rendererRegistry } from "./registry";
 
 interface Props {
-  object: SceneObject;
+    object: SceneObject;
 }
 
 export function ObjectRenderer({
-  object,
+    object,
 }: Props) {
-  switch (object.type) {
-    case "character":
-      return (
-        <CharacterRenderer
-          object={object}
-        />
-      );
+    const Renderer =
+        rendererRegistry[
+            object.type
+        ];
 
-    case "image":
-      return (
-        <ImageRenderer
-          object={object}
+    return (
+        <Renderer
+            object={object as never}
         />
-      );
-
-    case "text":
-      return (
-        <TextRenderer
-          object={object}
-        />
-      );
-
-    case "shape":
-      return (
-        <ShapeRenderer
-          object={object}
-        />
-      );
-
-    case "group":
-      return (
-        <GroupRenderer
-          object={object}
-        />
-      );
-  }
+    );
 }
