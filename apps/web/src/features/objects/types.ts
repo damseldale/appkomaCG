@@ -67,12 +67,23 @@ export interface TextObject
 
 export interface ShapeObject
   extends BaseObject {
+
   type: "shape";
 
   shape:
     | "rect"
     | "circle"
     | "triangle";
+
+  width: number;
+
+  height: number;
+
+  fill: string;
+
+  stroke: string;
+
+  strokeWidth: number;
 }
 
 /* ---------- Group ---------- */
