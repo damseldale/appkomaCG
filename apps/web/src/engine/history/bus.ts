@@ -1,17 +1,17 @@
-import type { Command } from "./command";
+import type { Command } from "./types";
 
-import { commandManager } from "./manager";
+import { commandManager } from "./CommandManager";
 
 export function dispatch(
-    command: Command,
+  command: Command,
 ) {
-    commandManager.execute(command);
+  commandManager.dispatch(command);
 }
 
 export function undo() {
-    commandManager.undo();
+  commandManager.undo();
 }
 
 export function redo() {
-    commandManager.redo();
+  commandManager.redo();
 }
