@@ -1,9 +1,15 @@
+import type { CommandContext } from "./context";
+
 export interface Command {
   readonly id: string;
 
   readonly type: string;
 
-  execute(): void;
+  execute(
+    context: CommandContext,
+  ): void;
 
-  undo(): void;
+  undo(
+    context: CommandContext,
+  ): void;
 }
