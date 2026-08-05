@@ -5,37 +5,65 @@ import { useCallback } from "react";
 import { useSceneStore } from "../../store";
 
 export function SelectionController() {
+    const selectObject = useSceneStore(
+        state => state.selectObject,
+    );
 
-    const clearSelection =
-        useSceneStore(
-            state => state.clearSelection,
-        );
+    const toggleObjectSelection = useSceneStore(
+        state => state.toggleObjectSelection,
+    );
 
-    const handleStagePointerDown =
-        useCallback(
-            (
-                e: any,
-            ) => {
+    const clearSelection = useSceneStore(
+        state => state.clearSelection,
+    );
 
-                const stage =
-                    e.target.getStage();
+    const handleObjectPointerDown = useCallback(
+        (
+            e: any,
+            id: string,
+        ) => {
+            e.cancelBubble = true;
 
-                if (
-                    e.target === stage
-                ) {
-                    clearSelection();
-                }
+            const nativeEvent =
+                e.evt as MouseEvent;
 
-            },
-            [
-                clearSelection,
-            ],
-        );
+            const multiSelect =
+                nativeEvent.ctrlKey ||
+                nativeEvent.metaKey;
+
+            if (multiSelect) {
+                toggleObjectSelection(id);
+                return;
+            }
+
+            selectObject(id);
+        },
+        [
+            selectObject,
+            toggleObjectSelection,
+        ],
+    );
+
+    const handleStagePointerDown = useCallback(
+        (
+            e: any,
+        ) => {
+            const stage =
+                e.target.getStage();
+
+            if (
+                e.target === stage
+            ) {
+                clearSelection();
+            }
+        },
+        [
+            clearSelection,
+        ],
+    );
 
     return {
-
+        handleObjectPointerDown,
         handleStagePointerDown,
-
     };
-
 }
