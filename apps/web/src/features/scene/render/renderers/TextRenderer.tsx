@@ -25,12 +25,20 @@ export function TextRenderer({
         useObjectInteraction(
             object,
         );
+    const selection =
+    SelectionController();
 
     return (
         <Group
-            ref={interaction.ref}
-            {...interaction.groupProps}
-        >
+    ref={groupRef}
+    draggable
+    onPointerDown={(e) =>
+        selection.handleObjectPointerDown(
+            e,
+            object.id,
+        )
+    }
+>
             <Text
                 text={object.text}
                 fontSize={object.fontSize}
