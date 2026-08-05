@@ -1,9 +1,21 @@
 "use client";
 
-import { Group, Text } from "react-konva";
+import { useEffect, useRef } from "react";
 
-import type { TextObject } from "@/features/objects";
-import { useSceneStore } from "../../store";
+import Konva from "konva";
+
+import {
+    Group,
+    Text,
+} from "react-konva";
+
+import type {
+    TextObject,
+} from "@/features/objects";
+
+import {
+    nodeRegistry,
+} from "../NodeRegistry";
 
 interface Props {
     object: TextObject;
@@ -13,55 +25,44 @@ export function TextRenderer({
     object,
 }: Props) {
 
-    const selectedIds =
-        useSceneStore(
-            state => state.selectedIds,
-        );
+    const groupRef =
+        useRef<Konva.Group>(null);
 
-    const selectObject =
-        useSceneStore(
-            state => state.selectObject,
-        );
+    useEffect(() => {
 
-    const selected =
-        selectedIds.includes(
+        const node =
+            groupRef.current;
+
+        if (!node) {
+            return;
+        }
+
+        nodeRegistry.register(
             object.id,
+            node,
         );
+
+        return () => {
+
+            nodeRegistry.unregister(
+                object.id,
+            );
+
+        };
+
+    }, [object.id]);
 
     return (
         <Group
-            onClick={(e) => {
-                e.cancelBubble = true;
-
-                selectObject(
-                    object.id,
-                );
-            }}
+            ref={groupRef}
         >
             <Text
                 x={object.transform.x}
                 y={object.transform.y}
                 text={object.text}
-                fontSize={
-                    object.fontSize
-                }
+                fontSize={object.fontSize}
                 fill={object.color}
             />
-
-            {selected && (
-                <Group listening={false}>
-                    <Text
-                        x={object.transform.x}
-                        y={object.transform.y}
-                        text={object.text}
-                        fontSize={
-                            object.fontSize
-                        }
-                        stroke="#2563EB"
-                        strokeWidth={1}
-                    />
-                </Group>
-            )}
         </Group>
     );
 }
