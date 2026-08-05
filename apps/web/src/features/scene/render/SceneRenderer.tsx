@@ -6,9 +6,12 @@ import { useSceneObjects } from "../selectors";
 
 import { bootstrapRenderers } from "./bootstrap";
 import { ObjectRenderer } from "./ObjectRenderer";
+import { SelectionOverlay } from "./SelectionOverlay";
 
 export function SceneRenderer() {
-    const objects = useSceneObjects();
+
+    const objects =
+        useSceneObjects();
 
     useEffect(() => {
         bootstrapRenderers();
@@ -22,6 +25,8 @@ export function SceneRenderer() {
                     object={object}
                 />
             ))}
+
+            <SelectionOverlay />
         </>
     );
 }
