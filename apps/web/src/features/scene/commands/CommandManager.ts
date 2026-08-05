@@ -2,13 +2,31 @@ import type {
     Command,
 } from "./Command";
 
+import {
+    historyManager,
+} from "./HistoryManager";
+
 class CommandManager {
 
     execute(
         command: Command,
     ) {
 
-        command.execute();
+        historyManager.execute(
+            command,
+        );
+
+    }
+
+    undo() {
+
+        historyManager.undo();
+
+    }
+
+    redo() {
+
+        historyManager.redo();
 
     }
 
