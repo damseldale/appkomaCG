@@ -1,21 +1,57 @@
-addObject()
+import type {
+    ObjectId,
+    SceneState,
+} from "./types";
 
-removeObject()
+import type {
+    SceneObject,
+    Transform,
+} from "../objects";
 
-duplicateObject()
+export interface SceneActions {
 
-updateTransform()
+    addObject(
+        object: SceneObject,
+    ): void;
 
-renameObject()
+    removeObject(
+        id: ObjectId,
+    ): void;
 
-lockObject()
+    duplicateObject(
+        id: ObjectId,
+    ): void;
 
-unlockObject()
+    updateTransform(
+        id: ObjectId,
+        transform: Partial<Transform>,
+    ): void;
 
-showObject()
+    renameObject(
+        id: ObjectId,
+        name: string,
+    ): void;
 
-hideObject()
+    lockObject(
+        id: ObjectId,
+    ): void;
 
-selectObject()
+    unlockObject(
+        id: ObjectId,
+    ): void;
 
-clearSelection()
+    showObject(
+        id: ObjectId,
+    ): void;
+
+    hideObject(
+        id: ObjectId,
+    ): void;
+
+    selectObject(
+        id: ObjectId,
+    ): void;
+
+    clearSelection(): void;
+
+}
