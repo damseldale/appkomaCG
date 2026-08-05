@@ -1,38 +1,54 @@
 "use client";
 
-import { Rect } from "react-konva";
+import { useEffect, useRef } from "react";
+
+import Konva from "konva";
+import { Transformer } from "react-konva";
 
 import { useSceneStore } from "../store";
+import { nodeRegistry } from "./NodeRegistry";
 
 export function SelectionOverlay() {
-    const {
-        objects,
-        selectedIds,
-    } = useSceneStore();
+
+    const transformerRef =
+        useRef<Konva.Transformer>(null);
+
+    const selectedIds =
+        useSceneStore(
+            state => state.selectedIds,
+        );
+
+    useEffect(() => {
+
+        const transformer =
+            transformerRef.current;
+
+        if (!transformer) {
+            return;
+        }
+
+        const nodes =
+            selectedIds
+                .map(id =>
+                    nodeRegistry.get(id),
+                )
+                .filter(Boolean) as Konva.Node[];
+
+        transformer.nodes(nodes);
+
+        transformer.getLayer()?.batchDraw();
+
+    }, [selectedIds]);
 
     return (
-        <>
-            {selectedIds.map((id) => {
-                const object = objects[id];
-
-                if (!object) {
-                    return null;
-                }
-
-                return (
-                    <Rect
-                        key={id}
-                        x={object.transform.x}
-                        y={object.transform.y}
-                        width={object.width}
-                        height={object.height}
-                        stroke="#2563EB"
-                        strokeWidth={2}
-                        dash={[6, 4]}
-                        listening={false}
-                    />
-                );
-            })}
-        </>
+        <Transformer
+            ref={transformerRef}
+            rotateEnabled
+            resizeEnabled
+            borderStroke="#2563EB"
+            anchorFill="#FFFFFF"
+            anchorStroke="#2563EB"
+            anchorSize={8}
+        />
     );
 }
