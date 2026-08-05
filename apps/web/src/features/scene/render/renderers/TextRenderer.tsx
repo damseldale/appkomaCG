@@ -1,3 +1,4 @@
+```tsx
 "use client";
 
 import {
@@ -11,7 +12,7 @@ import type {
 
 import {
     useObjectInteraction,
-} from "../useObjectInteraction";
+} from "../../hooks/useObjectInteraction";
 
 interface Props {
     object: TextObject;
@@ -25,25 +26,19 @@ export function TextRenderer({
         useObjectInteraction(
             object,
         );
-    const selection =
-    SelectionController();
 
     return (
         <Group
-    ref={groupRef}
-    draggable
-    onPointerDown={(e) =>
-        selection.handleObjectPointerDown(
-            e,
-            object.id,
-        )
-    }
->
+            ref={interaction.ref}
+            {...interaction.groupProps}
+        >
             <Text
                 text={object.text}
                 fontSize={object.fontSize}
-                fill={object.color}
+                fontFamily={object.fontFamily}
+                listening={false}
             />
         </Group>
     );
 }
+```
