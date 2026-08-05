@@ -6,7 +6,8 @@ import { useSceneObjects } from "../selectors";
 
 import { bootstrapRenderers } from "./bootstrap";
 import { ObjectRenderer } from "./ObjectRenderer";
-import { SelectionOverlay } from "./SelectionOverlay";
+
+import { TransformerController } from "./controllers/TransformerController";
 
 export function SceneRenderer() {
 
@@ -26,7 +27,8 @@ export function SceneRenderer() {
                 />
             ))}
 
-            <SelectionOverlay />
+            <TransformerController />
         </>
     );
+
 }
