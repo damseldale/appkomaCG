@@ -8,17 +8,26 @@ export function KeyboardController() {
 
     const selectedIds =
         useSceneStore(
-            state => state.selectedIds,
+            state =>
+                state.selectedIds,
         );
 
     const removeObject =
         useSceneStore(
-            state => state.removeObject,
+            state =>
+                state.removeObject,
+        );
+
+    const duplicateObject =
+        useSceneStore(
+            state =>
+                state.duplicateObject,
         );
 
     const clearSelection =
         useSceneStore(
-            state => state.clearSelection,
+            state =>
+                state.clearSelection,
         );
 
     useEffect(() => {
@@ -28,30 +37,41 @@ export function KeyboardController() {
         ) {
 
             if (
-                e.key !== "Delete"
+                e.key === "Delete"
             ) {
+
+                e.preventDefault();
+
+                selectedIds.forEach(
+                    id =>
+                        removeObject(
+                            id,
+                        ),
+                );
+
+                clearSelection();
+
                 return;
+
             }
 
             if (
-                selectedIds.length === 0
+                (e.ctrlKey ||
+                    e.metaKey) &&
+                e.key.toLowerCase() ===
+                    "d"
             ) {
-                return;
+
+                e.preventDefault();
+
+                selectedIds.forEach(
+                    id =>
+                        duplicateObject(
+                            id,
+                        ),
+                );
+
             }
-
-            e.preventDefault();
-
-            selectedIds.forEach(
-                id => {
-
-                    removeObject(
-                        id,
-                    );
-
-                },
-            );
-
-            clearSelection();
 
         }
 
@@ -72,6 +92,7 @@ export function KeyboardController() {
     }, [
         selectedIds,
         removeObject,
+        duplicateObject,
         clearSelection,
     ]);
 
