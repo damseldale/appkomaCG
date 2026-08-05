@@ -1,9 +1,22 @@
 "use client";
 
-import { Group, Rect, Text } from "react-konva";
+import { useEffect, useRef } from "react";
 
-import type { ImageObject } from "@/features/objects";
-import { useSceneStore } from "../../store";
+import Konva from "konva";
+
+import {
+    Group,
+    Rect,
+    Text,
+} from "react-konva";
+
+import type {
+    ImageObject,
+} from "@/features/objects";
+
+import {
+    nodeRegistry,
+} from "../NodeRegistry";
 
 interface Props {
     object: ImageObject;
@@ -13,30 +26,36 @@ export function ImageRenderer({
     object,
 }: Props) {
 
-    const selectedIds =
-        useSceneStore(
-            state => state.selectedIds,
-        );
+    const groupRef =
+        useRef<Konva.Group>(null);
 
-    const selectObject =
-        useSceneStore(
-            state => state.selectObject,
-        );
+    useEffect(() => {
 
-    const selected =
-        selectedIds.includes(
+        const node =
+            groupRef.current;
+
+        if (!node) {
+            return;
+        }
+
+        nodeRegistry.register(
             object.id,
+            node,
         );
+
+        return () => {
+
+            nodeRegistry.unregister(
+                object.id,
+            );
+
+        };
+
+    }, [object.id]);
 
     return (
         <Group
-            onClick={(e) => {
-                e.cancelBubble = true;
-
-                selectObject(
-                    object.id,
-                );
-            }}
+            ref={groupRef}
         >
             <Rect
                 x={object.transform.x}
@@ -44,25 +63,19 @@ export function ImageRenderer({
                 width={object.width}
                 height={object.height}
                 fill="#E5E7EB"
-                stroke={
-                    selected
-                        ? "#2563EB"
-                        : "#9CA3AF"
-                }
-                strokeWidth={
-                    selected
-                        ? 2
-                        : 1
-                }
+                stroke="#9CA3AF"
             />
 
             <Text
                 x={object.transform.x}
-                y={object.transform.y + object.height / 2 - 8}
+                y={
+                    object.transform.y +
+                    object.height / 2 -
+                    8
+                }
                 width={object.width}
                 align="center"
                 text="IMAGE"
-                listening={false}
             />
         </Group>
     );
