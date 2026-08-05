@@ -42,10 +42,13 @@ export function KeyboardController() {
             e.preventDefault();
 
             selectedIds.forEach(
-                id =>
+                id => {
+
                     removeObject(
                         id,
-                    ),
+                    );
+
+                },
             );
 
             clearSelection();
