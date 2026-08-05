@@ -1,37 +1,54 @@
 "use client";
 
-import { Circle, Rect } from "react-konva";
+import { Group, Rect } from "react-konva";
 
 import type { ShapeObject } from "@/features/objects";
+import { useSceneStore } from "../../store";
 
 interface Props {
-  object: ShapeObject;
+    object: ShapeObject;
 }
 
 export function ShapeRenderer({
-  object,
+    object,
 }: Props) {
-  switch (object.shape) {
-    case "circle":
-      return (
-        <Circle
-          x={object.transform.x}
-          y={object.transform.y}
-          radius={50}
-          fill="#34d399"
-        />
-      );
 
-    case "rect":
-    default:
-      return (
-        <Rect
-          x={object.transform.x}
-          y={object.transform.y}
-          width={120}
-          height={80}
-          fill="#34d399"
-        />
-      );
-  }
+    const selectedIds = useSceneStore(
+        state => state.selectedIds,
+    );
+
+    const selectObject = useSceneStore(
+        state => state.selectObject,
+    );
+
+    const selected = selectedIds.includes(
+        object.id,
+    );
+
+    return (
+        <Group
+            onClick={(e) => {
+                e.cancelBubble = true;
+                selectObject(object.id);
+            }}
+        >
+            <Rect
+                x={object.transform.x}
+                y={object.transform.y}
+                width={object.width}
+                height={object.height}
+                fill={object.fill}
+                stroke={
+                    selected
+                        ? "#2563EB"
+                        : object.stroke
+                }
+                strokeWidth={
+                    selected
+                        ? 2
+                        : object.strokeWidth
+                }
+            />
+        </Group>
+    );
 }
