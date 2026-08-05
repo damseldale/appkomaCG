@@ -13,10 +13,15 @@ interface Props {
 export function ObjectRenderer({
     object,
 }: Props) {
-    const Renderer =
-        getRenderer(object.type);
+    const Renderer = getRenderer(
+        object.type,
+    );
 
     if (!Renderer) {
+        console.warn(
+            `[Renderer] No renderer registered for "${object.type}"`,
+        );
+
         return null;
     }
 
