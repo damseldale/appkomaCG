@@ -19,7 +19,7 @@ export function SceneRenderer() {
 
     return (
         <>
-            {objects.map((object) => (
+            {objects.map(object => (
                 <ObjectRenderer
                     key={object.id}
                     object={object}
