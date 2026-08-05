@@ -1,4 +1,4 @@
 export * from "./bus";
-export * from "./command";
-export * from "./history";
-export * from "./manager";
+export * from "./CommandManager";
+export * from "./HistoryStack";
+export * from "./types";
