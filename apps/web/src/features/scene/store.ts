@@ -22,6 +22,10 @@ export interface SceneState {
         object: SceneObject,
     ): void;
 
+    removeObject(
+        id: ObjectId,
+    ): void;
+
     updateTransform(
         id: ObjectId,
         transform: Partial<Transform>,
@@ -76,6 +80,42 @@ export const useSceneStore =
                         ],
 
                     }),
+                );
+
+            },
+
+            removeObject(
+                id,
+            ) {
+
+                set(
+                    state => {
+
+                        const objects = {
+                            ...state.objects,
+                        };
+
+                        delete objects[id];
+
+                        return {
+
+                            objects,
+
+                            rootIds:
+                                state.rootIds.filter(
+                                    item =>
+                                        item !== id,
+                                ),
+
+                            selectedIds:
+                                state.selectedIds.filter(
+                                    item =>
+                                        item !== id,
+                                ),
+
+                        };
+
+                    },
                 );
 
             },
@@ -156,8 +196,7 @@ export const useSceneStore =
                                 exists
                                     ? state.selectedIds.filter(
                                           item =>
-                                              item !==
-                                              id,
+                                              item !== id,
                                       )
                                     : [
                                           ...state.selectedIds,
@@ -175,8 +214,7 @@ export const useSceneStore =
 
                 set({
 
-                    selectedIds:
-                        [],
+                    selectedIds: [],
 
                 });
 
