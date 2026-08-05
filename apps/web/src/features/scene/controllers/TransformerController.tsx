@@ -10,47 +10,17 @@ import { nodeRegistry } from "../NodeRegistry";
 
 export function TransformerController() {
 
-    const command =
-    useCommandController();
-
-function handleTransformEnd() {
-
-    const transformer =
-        transformerRef.current;
-
-    if (!transformer) {
-        return;
-    }
-
-    const nodes =
-        transformer.nodes();
-
-    if (nodes.length !== 1) {
-        return;
-    }
-
-    const node =
-        nodes[0];
-
-    command.commitTransform(
-        node.id(),
-        {
-            x: node.x(),
-            y: node.y(),
-            rotation: node.rotation(),
-            scaleX: node.scaleX(),
-            scaleY: node.scaleY(),
-        },
-    );
-
-}
-
     const transformerRef =
         useRef<Konva.Transformer>(null);
 
     const selectedIds =
         useSceneStore(
             state => state.selectedIds,
+        );
+
+    const updateTransform =
+        useSceneStore(
+            state => state.updateTransform,
         );
 
     useEffect(() => {
@@ -80,10 +50,46 @@ function handleTransformEnd() {
 
     }, [selectedIds]);
 
+    function handleTransformEnd() {
+
+        const transformer =
+            transformerRef.current;
+
+        if (!transformer) {
+            return;
+        }
+
+        const nodes =
+            transformer.nodes();
+
+        nodes.forEach(
+            node => {
+
+                updateTransform(
+                    node.id(),
+                    {
+                        x: node.x(),
+                        y: node.y(),
+                        rotation:
+                            node.rotation(),
+                        scaleX:
+                            node.scaleX(),
+                        scaleY:
+                            node.scaleY(),
+                    },
+                );
+
+            },
+        );
+
+    }
+
     return (
         <Transformer
             ref={transformerRef}
-            onTransformEnd={handleTransformEnd}
+            onTransformEnd={
+                handleTransformEnd
+            }
             rotateEnabled
             resizeEnabled
             borderStroke="#2563EB"
