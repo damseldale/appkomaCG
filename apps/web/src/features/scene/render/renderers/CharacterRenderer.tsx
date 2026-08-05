@@ -25,8 +25,7 @@ export function CharacterRenderer({
         object.id,
     );
 
-    return (
-        const selection =
+  const selection =
     SelectionController();
 
 <Group
