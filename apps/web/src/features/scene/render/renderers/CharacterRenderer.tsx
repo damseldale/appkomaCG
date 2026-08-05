@@ -26,14 +26,19 @@ export function CharacterRenderer({
     );
 
     return (
-        <Group
-            x={object.transform.x}
-            y={object.transform.y}
-            onClick={(e) => {
-                e.cancelBubble = true;
-                selectObject(object.id);
-            }}
-        >
+        const selection =
+    SelectionController();
+
+<Group
+    ref={groupRef}
+    draggable
+    onPointerDown={(e) =>
+        selection.handleObjectPointerDown(
+            e,
+            object.id,
+        )
+    }
+>
             <Circle
                 radius={40}
                 fill="#FACC15"
