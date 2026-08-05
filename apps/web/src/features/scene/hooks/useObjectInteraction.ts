@@ -8,7 +8,7 @@ import type {
 } from "konva/lib/Node";
 
 import { useSceneStore } from "../store";
-import { nodeRegistry } from "./NodeRegistry";
+import { nodeRegistry } from "../render/NodeRegistry";
 
 interface TransformLike {
     x: number;
@@ -25,7 +25,19 @@ interface ObjectLike {
 
 export function useObjectInteraction(
     object: ObjectLike,
-) {
+) { 
+
+    const selectObject =
+    useSceneStore(
+        state =>
+            state.selectObject,
+        );
+
+    const toggleObjectSelection =
+    useSceneStore(
+        state =>
+            state.toggleObjectSelection,
+        );
 
     const ref =
         useRef<Konva.Group>(null);
@@ -58,6 +70,31 @@ export function useObjectInteraction(
         };
 
     }, [object.id]);
+
+    function handlePointerDown(
+    e: KonvaEventObject<MouseEvent>,
+) {
+
+    e.cancelBubble = true;
+
+    const multi =
+        e.evt.ctrlKey ||
+        e.evt.metaKey;
+
+    if (multi) {
+
+        toggleObjectSelection(
+            object.id,
+        );
+
+        return;
+    }
+
+    selectObject(
+        object.id,
+    );
+
+}
 
     function handleDragEnd(
         e: KonvaEventObject<DragEvent>,
@@ -99,8 +136,12 @@ export function useObjectInteraction(
 
             draggable: true,
 
+            onPointerDown:
+                handlePointerDown,
+
             onDragEnd:
                 handleDragEnd,
+
 
         },
 
