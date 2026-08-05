@@ -1,13 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-import Konva from "konva";
-
-import type {
-    KonvaEventObject,
-} from "konva/lib/Node";
-
 import {
     Group,
     Rect,
@@ -19,12 +11,8 @@ import type {
 } from "@/features/objects";
 
 import {
-    useSceneStore,
-} from "../../store";
-
-import {
-    nodeRegistry,
-} from "../NodeRegistry";
+    useObjectInteraction,
+} from "../../hooks/useObjectInteraction";
 
 interface Props {
     object: ImageObject;
@@ -34,69 +22,16 @@ export function ImageRenderer({
     object,
 }: Props) {
 
-    const selection =
-    SelectionController();
-
-    const groupRef =
-        useRef<Konva.Group>(null);
-
-    const updateTransform =
-        useSceneStore(
-            state => state.updateTransform,
+    const interaction =
+        useObjectInteraction(
+            object,
         );
-
-    useEffect(() => {
-
-        const node =
-            groupRef.current;
-
-        if (!node) {
-            return;
-        }
-
-        nodeRegistry.register(
-            object.id,
-            node,
-        );
-
-        return () => {
-
-            nodeRegistry.unregister(
-                object.id,
-            );
-
-        };
-
-    }, [object.id]);
-
-    function handleDragEnd(
-        e: KonvaEventObject<DragEvent>,
-    ) {
-
-        const node =
-            e.target;
-
-        updateTransform(
-            object.id,
-            {
-                x: node.x(),
-                y: node.y(),
-            },
-        );
-
-    }
 
     return (
         <Group
-    ref={groupRef}
-    draggable
-    onPointerDown={(e) =>
-        selection.handleObjectPointerDown(
-            e,
-            object.id,
-        )
-    }
->
+            ref={interaction.ref}
+            {...interaction.groupProps}
+        >
             <Rect
                 width={object.width}
                 height={object.height}
@@ -108,9 +43,7 @@ export function ImageRenderer({
                 y={
                     object.height / 2 - 8
                 }
-                width={
-                    object.width
-                }
+                width={object.width}
                 align="center"
                 text="IMAGE"
                 listening={false}
