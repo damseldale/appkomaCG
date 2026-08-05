@@ -2,7 +2,9 @@ import type {
     SceneTransform,
 } from "@/features/objects";
 
-import { useSceneStore } from "../store";
+import {
+    useSceneStore,
+} from "../store";
 
 import type {
     Command,
