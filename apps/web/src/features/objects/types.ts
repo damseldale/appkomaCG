@@ -54,6 +54,7 @@ export interface ImageObject
 
 export interface TextObject
   extends BaseObject {
+
   type: "text";
 
   text: string;
@@ -61,6 +62,8 @@ export interface TextObject
   fontSize: number;
 
   fontFamily: string;
+
+  color: string;
 }
 
 /* ---------- Shape ---------- */
