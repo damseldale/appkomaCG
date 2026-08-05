@@ -7,7 +7,18 @@ export function useSceneObjects() {
     ),
   );
 }
+export const useSelectedIds = () =>
+  useSceneStore(
+    (state) => state.selectedIds,
+  );
 
+export const useIsSelected = (
+  id: string,
+) =>
+  useSceneStore(
+    (state) =>
+      state.selectedIds.includes(id),
+  );
 export function useSelectedObjects() {
   return useSceneStore((state) =>
     state.selectedIds.map(
