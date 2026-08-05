@@ -34,6 +34,9 @@ export function ImageRenderer({
     object,
 }: Props) {
 
+    const selection =
+    SelectionController();
+
     const groupRef =
         useRef<Konva.Group>(null);
 
@@ -85,23 +88,15 @@ export function ImageRenderer({
 
     return (
         <Group
-            ref={groupRef}
-            x={object.transform.x}
-            y={object.transform.y}
-            rotation={
-                object.transform.rotation
-            }
-            scaleX={
-                object.transform.scaleX
-            }
-            scaleY={
-                object.transform.scaleY
-            }
-            draggable
-            onDragEnd={
-                handleDragEnd
-            }
-        >
+    ref={groupRef}
+    draggable
+    onPointerDown={(e) =>
+        selection.handleObjectPointerDown(
+            e,
+            object.id,
+        )
+    }
+>
             <Rect
                 width={object.width}
                 height={object.height}
