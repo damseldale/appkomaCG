@@ -10,8 +10,16 @@ import {
 } from "react-konva";
 
 import type {
+    KonvaEventObject,
+} from "konva/lib/Node";
+
+import type {
     TextObject,
 } from "@/features/objects";
+
+import {
+    useSceneStore,
+} from "../../store";
 
 import {
     nodeRegistry,
@@ -27,6 +35,11 @@ export function TextRenderer({
 
     const groupRef =
         useRef<Konva.Group>(null);
+
+    const updateTransform =
+        useSceneStore(
+            state => state.updateTransform,
+        );
 
     useEffect(() => {
 
@@ -52,16 +65,41 @@ export function TextRenderer({
 
     }, [object.id]);
 
+    function handleDragEnd(
+        e: KonvaEventObject<DragEvent>,
+    ) {
+
+        const node =
+            e.target;
+
+        updateTransform(
+            object.id,
+            {
+                x: node.x(),
+                y: node.y(),
+            },
+        );
+
+    }
+
     return (
         <Group
             ref={groupRef}
+            x={object.transform.x}
+            y={object.transform.y}
+            draggable
+            onDragEnd={
+                handleDragEnd
+            }
         >
             <Text
-                x={object.transform.x}
-                y={object.transform.y}
                 text={object.text}
-                fontSize={object.fontSize}
-                fill={object.color}
+                fontSize={
+                    object.fontSize
+                }
+                fill={
+                    object.color
+                }
             />
         </Group>
     );
