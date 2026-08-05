@@ -1,9 +1,22 @@
 "use client";
 
-import { Group, Circle, Text } from "react-konva";
+import {
+    Group,
+    Circle,
+    Text,
+} from "react-konva";
 
-import type { CharacterObject } from "@/features/objects";
-import { useSceneStore } from "../../store";
+import type {
+    CharacterObject,
+} from "@/features/objects";
+
+import {
+    useSceneStore,
+} from "../../store";
+
+import {
+    useObjectInteraction,
+} from "../../hooks/useObjectInteraction";
 
 interface Props {
     object: CharacterObject;
@@ -13,31 +26,27 @@ export function CharacterRenderer({
     object,
 }: Props) {
 
-    const selectedIds = useSceneStore(
-        state => state.selectedIds,
-    );
+    const interaction =
+        useObjectInteraction(
+            object,
+        );
 
-    const selectObject = useSceneStore(
-        state => state.selectObject,
-    );
+    const selectedIds =
+        useSceneStore(
+            state =>
+                state.selectedIds,
+        );
 
-    const selected = selectedIds.includes(
-        object.id,
-    );
-
-  const selection =
-    SelectionController();
-
-<Group
-    ref={groupRef}
-    draggable
-    onPointerDown={(e) =>
-        selection.handleObjectPointerDown(
-            e,
+    const selected =
+        selectedIds.includes(
             object.id,
-        )
-    }
->
+        );
+
+    return (
+        <Group
+            ref={interaction.ref}
+            {...interaction.groupProps}
+        >
             <Circle
                 radius={40}
                 fill="#FACC15"
@@ -54,9 +63,9 @@ export function CharacterRenderer({
             />
 
             <Text
+                x={-40}
                 y={52}
                 width={80}
-                x={-40}
                 align="center"
                 text="Character"
                 listening={false}
