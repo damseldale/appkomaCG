@@ -1,33 +1,34 @@
-import { useSceneStore } from "../store";
+import {
+    commandManager,
+} from "../commands";
+
+import {
+    TransformCommand,
+} from "../commands";
 
 export function useCommandController() {
 
-    const updateTransform =
-        useSceneStore(
-            state => state.updateTransform,
-        );
-
-    function commitTransform(
+    function executeTransform(
         id: string,
-        transform: {
-            x: number;
-            y: number;
-            rotation: number;
-            scaleX: number;
-            scaleY: number;
-        },
+        before: SceneTransform,
+        after: SceneTransform,
     ) {
 
-        updateTransform(
-            id,
-            transform,
+        commandManager.execute(
+
+            new TransformCommand(
+                id,
+                before,
+                after,
+            ),
+
         );
 
     }
 
     return {
 
-        commitTransform,
+        executeTransform,
 
     };
 
