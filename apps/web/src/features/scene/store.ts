@@ -26,6 +26,10 @@ export interface SceneState {
         id: ObjectId,
     ): void;
 
+    duplicateObject(
+        id: ObjectId,
+    ): void;
+
     updateTransform(
         id: ObjectId,
         transform: Partial<Transform>,
@@ -112,6 +116,81 @@ export const useSceneStore =
                                     item =>
                                         item !== id,
                                 ),
+
+                        };
+
+                    },
+                );
+
+            },
+
+            duplicateObject(
+                id,
+            ) {
+
+                set(
+                    state => {
+
+                        const object =
+                            state.objects[id];
+
+                        if (!object) {
+                            return state;
+                        }
+
+                        const newId =
+                            crypto.randomUUID();
+
+                        const duplicate = {
+
+                            ...object,
+
+                            id: newId,
+
+                            name:
+                                object.name +
+                                " Copy",
+
+                            transform: {
+
+                                ...object.transform,
+
+                                x:
+                                    object.transform.x +
+                                    20,
+
+                                y:
+                                    object.transform.y +
+                                    20,
+
+                            },
+
+                        };
+
+                        return {
+
+                            objects: {
+
+                                ...state.objects,
+
+                                [newId]:
+                                    duplicate,
+
+                            },
+
+                            rootIds: [
+
+                                ...state.rootIds,
+
+                                newId,
+
+                            ],
+
+                            selectedIds: [
+
+                                newId,
+
+                            ],
 
                         };
 
