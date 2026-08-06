@@ -1,17 +1,17 @@
 import type {
-    Command,
-} from "./Command";
+    SceneCommand,
+} from "./SceneCommand";
 
 class HistoryManager {
 
     private undoStack:
-        Command[] = [];
+        SceneCommand[] = [];
 
     private redoStack:
-        Command[] = [];
+        SceneCommand[] = [];
 
     execute(
-        command: Command,
+        command: SceneCommand,
     ) {
 
         command.execute();
@@ -55,6 +55,44 @@ class HistoryManager {
         this.undoStack.push(
             command,
         );
+
+    }
+
+    clear() {
+
+        this.undoStack = [];
+
+        this.redoStack = [];
+
+    }
+
+    canUndo() {
+
+        return (
+            this.undoStack.length >
+            0
+        );
+
+    }
+
+    canRedo() {
+
+        return (
+            this.redoStack.length >
+            0
+        );
+
+    }
+
+    getUndoCount() {
+
+        return this.undoStack.length;
+
+    }
+
+    getRedoCount() {
+
+        return this.redoStack.length;
 
     }
 
