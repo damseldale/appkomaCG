@@ -25,23 +25,20 @@ export class TransformCommand
 
     execute() {
 
-        useSceneStore
-            .getState()
-            .updateTransform(
-                this.id,
-                this.after,
-            );
+    sceneService
+        .updateTransform(
+            this.id,
+            this.after,
+        );
 
     }
-
     undo() {
 
-        useSceneStore
-            .getState()
-            .updateTransform(
-                this.id,
-                this.before,
-            );
+    sceneService
+        .updateTransform(
+            this.id,
+            this.before,
+        );
 
     }
 
