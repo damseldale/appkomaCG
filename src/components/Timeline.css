@@ -1,0 +1,55 @@
+.timeline {
+  height: 60px;
+  background-color: #1a1a1e;
+  border-top: 1px solid #333;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+.timeline-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.timeline-btn {
+  background: #2a2a2e;
+  color: white;
+  border: 1px solid #444;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.timeline-btn:hover {
+  background: #3a3a3e;
+}
+
+.time-indicator {
+  font-size: 0.85rem;
+  color: #888;
+  font-family: monospace;
+}
+
+.timeline-track {
+  flex: 1;
+  height: 8px;
+  background-color: #2a2a2e;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+.scrubber-line {
+  width: 12px;
+  height: 16px;
+  background-color: #3b82f6;
+  position: absolute;
+  top: -4px;
+  left: 0;
+  border-radius: 3px;
+  cursor: ew-resize;
+}
