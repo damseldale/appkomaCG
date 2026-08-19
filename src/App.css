@@ -1,0 +1,16 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #121214;
+  color: #e1e1e6;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 120px); /* Menyisakan ruang untuk Navbar dan Timeline */
+  overflow: hidden;
+}
