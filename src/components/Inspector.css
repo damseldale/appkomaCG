@@ -1,0 +1,45 @@
+.inspector {
+  width: 280px;
+  background-color: #1a1a1e;
+  border-left: 1px solid #333;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.inspector h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+}
+
+.property-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.property-group label {
+  font-size: 0.85rem;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.property-group input[type="number"] {
+  background-color: #2a2a2e;
+  border: 1px solid #444;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.property-group input[type="color"] {
+  border: none;
+  width: 100%;
+  height: 35px;
+  background: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
