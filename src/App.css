@@ -1,16 +1,1 @@
-.app-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background-color: #121214;
-  color: #e1e1e6;
-}
-
-.workspace {
-  display: flex;
-  flex: 1;
-  height: calc(100vh - 120px); /* Menyisakan ruang untuk Navbar dan Timeline */
-  overflow: hidden;
-}
+.app-layout{display:flex;flex-direction:column;height:100dvh;width:100%;overflow:hidden;background-color:#121214;color:#e1e1e6}.workspace{display:flex;flex:1;min-height:0;min-width:0;overflow:hidden}.workspace>*{min-height:0}.workspace .canvas-container{min-width:0;min-height:0}.app-layout button,.app-layout input,.app-layout select,.app-layout textarea{font:inherit}.app-layout button{box-sizing:border-box}.app-layout *{box-sizing:border-box}
