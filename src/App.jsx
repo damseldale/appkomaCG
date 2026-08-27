@@ -1,5 +1,6 @@
 import { useEditorKeyboard } from './features/scene/useEditorKeyboard';
 import CanvasEditor from './components/CanvasEditor';
+import CanvasViewport from './components/CanvasViewport';
 import Timeline from './components/Timeline';
 import Inspector from './components/Inspector';
 import Navbar from './components/Navbar';
@@ -12,6 +13,6 @@ import './components/EditorToolbar.css';
 
 function App() {
   useEditorKeyboard();
-  return <div className="app-layout"><Navbar /><EditorToolbar /><div className="workspace"><LayerPanel /><AssetLibrary /><CanvasEditor /><Inspector /></div><Timeline /><ProjectPersistencePanel /></div>;
+  return <div className="app-layout"><Navbar /><EditorToolbar /><div className="workspace"><LayerPanel /><AssetLibrary /><CanvasViewport><CanvasEditor /></CanvasViewport><Inspector /></div><Timeline /><ProjectPersistencePanel /></div>;
 }
 export default App;
