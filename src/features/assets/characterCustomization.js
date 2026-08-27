@@ -10,6 +10,8 @@ const updateCharacter = (objectId, patch) => {
 
 export const setCharacterPose = (objectId, pose) => updateCharacter(objectId, { pose });
 export const setCharacterExpression = (objectId, expression) => updateCharacter(objectId, { expression });
-export const setCharacterPart = (objectId, part, value) => updateCharacter(objectId, {
-  data: { ...(useSceneStore.getState().objects[objectId]?.data || {}), parts: { ...(useSceneStore.getState().objects[objectId]?.data?.parts || {}), [part]: value } },
-});
+export const setCharacterPart = (objectId, part, value) => {
+  const object = useSceneStore.getState().objects[objectId];
+  if (!object || object.type !== 'character') return;
+  updateCharacter(objectId, { parts: { ...(object.parts || {}), [part]: value } });
+};
