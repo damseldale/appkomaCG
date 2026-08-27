@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import './CanvasEditor.css';
 import { createShapeObject, selectRootIds, selectSelectedIds, useSceneStore } from '../features/scene';
+import { sceneHistory } from '../features/scene/history/sceneHistory';
+import { UpdateTransformCommand, UpdatePropertiesCommand } from '../features/scene/history/commands';
 
 const HANDLE_SIZE = 10;
 
@@ -14,7 +16,6 @@ const CanvasEditor = () => {
   const addObject = useSceneStore((state) => state.addObject);
   const selectObject = useSceneStore((state) => state.selectObject);
   const clearSelection = useSceneStore((state) => state.clearSelection);
-  const updateTransform = useSceneStore((state) => state.updateTransform);
 
   useEffect(() => {
     if (initializedRef.current || rootIds.length > 0) return;
@@ -27,114 +28,77 @@ const CanvasEditor = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     rootIds.forEach((id) => {
       const object = objects[id];
       if (!object || !object.visible) return;
       const { x, y, rotation, scaleX, scaleY } = object.transform;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.scale(scaleX, scaleY);
+      ctx.save(); ctx.translate(x, y); ctx.rotate((rotation * Math.PI) / 180); ctx.scale(scaleX, scaleY);
       if (object.type === 'shape') {
         ctx.fillStyle = object.fill;
-        if (object.shape === 'circle') {
-          ctx.beginPath();
-          ctx.arc(object.width / 2, object.height / 2, Math.min(object.width, object.height) / 2, 0, Math.PI * 2);
-          ctx.fill();
-        } else ctx.fillRect(0, 0, object.width, object.height);
-      } else if (object.type === 'text') {
-        ctx.fillStyle = object.fill;
-        ctx.font = `${object.fontSize}px ${object.fontFamily}`;
-        ctx.fillText(object.text, 0, object.fontSize);
-      }
+        if (object.shape === 'circle') { ctx.beginPath(); ctx.arc(object.width / 2, object.height / 2, Math.min(object.width, object.height) / 2, 0, Math.PI * 2); ctx.fill(); }
+        else ctx.fillRect(0, 0, object.width, object.height);
+      } else if (object.type === 'text') { ctx.fillStyle = object.fill; ctx.font = `${object.fontSize}px ${object.fontFamily}`; ctx.fillText(object.text, 0, object.fontSize); }
       ctx.restore();
     });
-
     const selected = selectedIds.length === 1 ? objects[selectedIds[0]] : null;
     if (selected?.type === 'shape' && selected.visible) {
       const { x, y, rotation, scaleX, scaleY } = selected.transform;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate((rotation * Math.PI) / 180);
-      ctx.scale(scaleX, scaleY);
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([6, 4]);
-      ctx.strokeRect(-2, -2, selected.width + 4, selected.height + 4);
-      ctx.setLineDash([]);
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(selected.width - HANDLE_SIZE / 2, selected.height - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE);
-      ctx.restore();
+      ctx.save(); ctx.translate(x, y); ctx.rotate((rotation * Math.PI) / 180); ctx.scale(scaleX, scaleY);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.strokeRect(-2, -2, selected.width + 4, selected.height + 4); ctx.setLineDash([]);
+      ctx.fillStyle = '#fff'; ctx.fillRect(selected.width - HANDLE_SIZE / 2, selected.height - HANDLE_SIZE / 2, HANDLE_SIZE, HANDLE_SIZE); ctx.restore();
     }
   }, [objects, rootIds, selectedIds]);
 
-  const getCanvasPoint = (event) => {
-    const rect = canvasRef.current.getBoundingClientRect();
-    return {
-      x: (event.clientX - rect.left) * (canvasRef.current.width / rect.width),
-      y: (event.clientY - rect.top) * (canvasRef.current.height / rect.height),
-    };
-  };
-
-  const getSelectedBounds = () => {
-    const selected = selectedIds.length === 1 ? objects[selectedIds[0]] : null;
-    if (!selected || selected.type !== 'shape') return null;
-    return { object: selected, width: selected.width * selected.transform.scaleX, height: selected.height * selected.transform.scaleY };
-  };
+  const getCanvasPoint = (event) => { const rect = canvasRef.current.getBoundingClientRect(); return { x: (event.clientX - rect.left) * (canvasRef.current.width / rect.width), y: (event.clientY - rect.top) * (canvasRef.current.height / rect.height) }; };
+  const getSelectedBounds = () => { const selected = selectedIds.length === 1 ? objects[selectedIds[0]] : null; if (!selected || selected.type !== 'shape') return null; return { object: selected, width: selected.width * selected.transform.scaleX, height: selected.height * selected.transform.scaleY }; };
 
   const handlePointerDown = (event) => {
-    const point = getCanvasPoint(event);
-    const bounds = getSelectedBounds();
-
+    const point = getCanvasPoint(event); const bounds = getSelectedBounds();
     if (bounds) {
-      const right = bounds.object.transform.x + bounds.width;
-      const bottom = bounds.object.transform.y + bounds.height;
+      const right = bounds.object.transform.x + bounds.width; const bottom = bounds.object.transform.y + bounds.height;
       if (Math.abs(point.x - right) <= HANDLE_SIZE && Math.abs(point.y - bottom) <= HANDLE_SIZE) {
-        setInteraction({ type: 'resize', id: bounds.object.id, startX: point.x, startY: point.y, startWidth: bounds.object.width, startHeight: bounds.object.height });
-        return;
+        setInteraction({ type: 'resize', id: bounds.object.id, startX: point.x, startY: point.y, startWidth: bounds.object.width, startHeight: bounds.object.height }); return;
       }
     }
-
     for (let index = rootIds.length - 1; index >= 0; index -= 1) {
-      const id = rootIds[index];
-      const object = objects[id];
+      const id = rootIds[index]; const object = objects[id];
       if (!object || !object.visible || object.locked || object.type !== 'shape') continue;
       const { x, y, scaleX, scaleY } = object.transform;
       if (point.x >= x && point.x <= x + object.width * scaleX && point.y >= y && point.y <= y + object.height * scaleY) {
-        selectObject(id);
-        setInteraction({ type: 'drag', id, offsetX: point.x - x, offsetY: point.y - y });
-        return;
+        selectObject(id); setInteraction({ type: 'drag', id, offsetX: point.x - x, offsetY: point.y - y, before: { ...object.transform } }); return;
       }
     }
     clearSelection();
   };
 
+  const updateObjectDirectly = (id, patch) => useSceneStore.setState((state) => {
+    const object = state.objects[id]; if (!object || object.locked) return state;
+    return { objects: { ...state.objects, [id]: { ...object, ...patch } } };
+  });
+
   const handlePointerMove = (event) => {
     if (!interaction) return;
-    const point = getCanvasPoint(event);
-    const object = objects[interaction.id];
+    const point = getCanvasPoint(event); const object = objects[interaction.id];
     if (!object || object.locked || object.type !== 'shape') return;
-
-    if (interaction.type === 'drag') {
-      updateTransform(object.id, { x: point.x - interaction.offsetX, y: point.y - interaction.offsetY });
-    } else if (interaction.type === 'resize') {
-      const newWidth = Math.max(10, interaction.startWidth + (point.x - interaction.startX) / (object.transform.scaleX || 1));
-      const newHeight = Math.max(10, interaction.startHeight + (point.y - interaction.startY) / (object.transform.scaleY || 1));
-      useSceneStore.setState((state) => ({
-        objects: { ...state.objects, [object.id]: { ...object, width: newWidth, height: newHeight } },
-      }));
-    }
+    if (interaction.type === 'drag') updateObjectDirectly(object.id, { transform: { ...object.transform, x: point.x - interaction.offsetX, y: point.y - interaction.offsetY } });
+    else updateObjectDirectly(object.id, { width: Math.max(10, interaction.startWidth + (point.x - interaction.startX) / (object.transform.scaleX || 1)), height: Math.max(10, interaction.startHeight + (point.y - interaction.startY) / (object.transform.scaleY || 1)) });
   };
 
-  const stopInteraction = () => setInteraction(null);
+  const stopInteraction = () => {
+    if (!interaction) return;
+    const object = objects[interaction.id];
+    if (object && interaction.type === 'drag') {
+      const after = { ...object.transform };
+      if (JSON.stringify(interaction.before) !== JSON.stringify(after)) sceneHistory.execute(new UpdateTransformCommand(object.id, after, interaction.before));
+    } else if (object && interaction.type === 'resize') {
+      const before = { width: interaction.startWidth, height: interaction.startHeight }; const after = { width: object.width, height: object.height };
+      if (before.width !== after.width || before.height !== after.height) sceneHistory.execute(new UpdatePropertiesCommand(object.id, after, before));
+    }
+    setInteraction(null);
+  };
 
-  return (
-    <div className="canvas-container">
-      <canvas ref={canvasRef} width={800} height={500} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={stopInteraction} onPointerLeave={stopInteraction} />
-    </div>
-  );
+  return <div className="canvas-container"><canvas ref={canvasRef} width={800} height={500} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={stopInteraction} onPointerLeave={stopInteraction} /></div>;
 };
 
 export default CanvasEditor;
