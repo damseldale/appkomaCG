@@ -1,0 +1,7 @@
+.expression-panel { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); }
+.expression-panel-title { margin-bottom: 10px; color: #aeb3bf; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.expression-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.expression-list button { border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 8px 6px; background: #202228; color: #fff; cursor: pointer; font: inherit; font-size: 11px; }
+.expression-list button:hover { border-color: rgba(255,255,255,.25); }
+.expression-list button.active { border-color: #2d6cdf; background: #263a63; }
+.expression-empty { grid-column: 1 / -1; color: #777d89; font-size: 11px; }
