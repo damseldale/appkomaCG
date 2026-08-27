@@ -1,4 +1,4 @@
-import type { SceneObject, ShapeObject, Transform } from './types';
+import type { CharacterObject, SceneObject, ShapeObject, Transform } from './types';
 
 const defaultTransform: Transform = {
   x: 50,
@@ -22,6 +22,20 @@ export function createShapeObject(
     width: 100,
     height: 100,
     fill: '#3b82f6',
+    ...overrides,
+  };
+}
+
+export function createCharacterObject(
+  overrides: Partial<Omit<CharacterObject, 'id' | 'type'>> = {},
+): CharacterObject {
+  return {
+    id: crypto.randomUUID(),
+    type: 'character',
+    name: 'Character',
+    transform: { ...defaultTransform },
+    visible: true,
+    locked: false,
     ...overrides,
   };
 }
