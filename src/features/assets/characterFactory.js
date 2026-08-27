@@ -1,8 +1,12 @@
-import { createCharacterObject } from '../scene/factory';
+import { createCharacterObject } from '../scene/factory.ts';
 
 export const createCharacterFromAsset = (asset, options = {}) => {
-  const poses = asset?.data?.poses || [];
-  const expressions = asset?.data?.expressions || [];
+  if (!asset || asset.type !== 'character') {
+    throw new TypeError('createCharacterFromAsset expects a character asset');
+  }
+
+  const poses = asset.data?.poses || [];
+  const expressions = asset.data?.expressions || [];
   const pose = options.pose ?? poses[0]?.id ?? poses[0]?.name;
   const expression = options.expression ?? expressions[0]?.id ?? expressions[0]?.name;
 
