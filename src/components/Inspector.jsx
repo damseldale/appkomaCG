@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import './Inspector.css';
 import { selectSelectedIds, useSceneStore } from '../features/scene';
-import { useAssetStore, setCharacterPose } from '../features/assets';
+import { useAssetStore } from '../features/assets';
 import PosePanel from './PosePanel';
+import ExpressionPanel from './ExpressionPanel';
 
 const Inspector = () => {
   const selectedIds = useSceneStore(selectSelectedIds);
@@ -33,7 +34,7 @@ const Inspector = () => {
       <div className="property-group"><label htmlFor="object-y">Posisi Y</label><input id="object-y" type="number" value={transform.y} onChange={(event) => updateTransform(selectedObject.id, { y: Number(event.target.value) })} /></div>
       {size !== undefined && <div className="property-group"><label htmlFor="object-size">Ukuran</label><input id="object-size" type="number" min="1" value={size} onChange={(event) => updateSize(Number(event.target.value))} /></div>}
       {(selectedObject.type === 'shape' || selectedObject.type === 'text') && <div className="property-group"><label htmlFor="object-color">Warna</label><input id="object-color" type="color" value={selectedObject.fill} onChange={(event) => updateColor(event.target.value)} /></div>}
-      {selectedObject.type === 'character' && characterAsset && <PosePanel />}
+      {selectedObject.type === 'character' && characterAsset && <><PosePanel /><ExpressionPanel /></>}
     </aside>
   );
 };
