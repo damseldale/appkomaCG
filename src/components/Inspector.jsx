@@ -4,6 +4,7 @@ import { selectSelectedIds, useSceneStore } from '../features/scene';
 import { useAssetStore } from '../features/assets';
 import PosePanel from './PosePanel';
 import ExpressionPanel from './ExpressionPanel';
+import CharacterPartsPanel from './CharacterPartsPanel';
 
 const Inspector = () => {
   const selectedIds = useSceneStore(selectSelectedIds);
@@ -24,19 +25,16 @@ const Inspector = () => {
     if (selectedObject.type !== 'shape' && selectedObject.type !== 'text') return;
     useSceneStore.setState((state) => ({ objects: { ...state.objects, [selectedObject.id]: { ...selectedObject, fill: value } } }));
   };
-
   const characterAsset = selectedObject.type === 'character' ? assets[selectedObject.characterId] : null;
 
-  return (
-    <aside className="inspector">
-      <h3>Inspector</h3>
-      <div className="property-group"><label htmlFor="object-x">Posisi X</label><input id="object-x" type="number" value={transform.x} onChange={(event) => updateTransform(selectedObject.id, { x: Number(event.target.value) })} /></div>
-      <div className="property-group"><label htmlFor="object-y">Posisi Y</label><input id="object-y" type="number" value={transform.y} onChange={(event) => updateTransform(selectedObject.id, { y: Number(event.target.value) })} /></div>
-      {size !== undefined && <div className="property-group"><label htmlFor="object-size">Ukuran</label><input id="object-size" type="number" min="1" value={size} onChange={(event) => updateSize(Number(event.target.value))} /></div>}
-      {(selectedObject.type === 'shape' || selectedObject.type === 'text') && <div className="property-group"><label htmlFor="object-color">Warna</label><input id="object-color" type="color" value={selectedObject.fill} onChange={(event) => updateColor(event.target.value)} /></div>}
-      {selectedObject.type === 'character' && characterAsset && <><PosePanel /><ExpressionPanel /></>}
-    </aside>
-  );
+  return <aside className="inspector">
+    <h3>Inspector</h3>
+    <div className="property-group"><label htmlFor="object-x">Posisi X</label><input id="object-x" type="number" value={transform.x} onChange={(event) => updateTransform(selectedObject.id, { x: Number(event.target.value) })} /></div>
+    <div className="property-group"><label htmlFor="object-y">Posisi Y</label><input id="object-y" type="number" value={transform.y} onChange={(event) => updateTransform(selectedObject.id, { y: Number(event.target.value) })} /></div>
+    {size !== undefined && <div className="property-group"><label htmlFor="object-size">Ukuran</label><input id="object-size" type="number" min="1" value={size} onChange={(event) => updateSize(Number(event.target.value))} /></div>}
+    {(selectedObject.type === 'shape' || selectedObject.type === 'text') && <div className="property-group"><label htmlFor="object-color">Warna</label><input id="object-color" type="color" value={selectedObject.fill} onChange={(event) => updateColor(event.target.value)} /></div>}
+    {selectedObject.type === 'character' && characterAsset && <><PosePanel /><ExpressionPanel /><CharacterPartsPanel /></>}
+  </aside>;
 };
 
 export default Inspector;
