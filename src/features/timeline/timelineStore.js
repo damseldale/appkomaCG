@@ -6,8 +6,8 @@ export const useTimelineStore = create((set) => ({
   playing: false,
   keyframes: {},
 
-  setCurrentTime: (currentTime) => set({ currentTime: Math.max(0, currentTime) }),
-  setDuration: (duration) => set({ duration: Math.max(1, duration) }),
+  setCurrentTime: (currentTime) => set((state) => ({ currentTime: Math.max(0, Math.min(state.duration, currentTime)) })),
+  setDuration: (duration) => set((state) => ({ duration: Math.max(1, duration), currentTime: Math.min(state.currentTime, Math.max(1, duration)) })),
   togglePlaying: () => set((state) => ({ playing: !state.playing })),
   setPlaying: (playing) => set({ playing }),
 
