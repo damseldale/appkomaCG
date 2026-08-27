@@ -1,0 +1,5 @@
+.character-variant-panel{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.character-variant-title{margin-bottom:10px;color:#aeb3bf;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.character-variant-panel>button,.character-variant-list button{width:100%;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:8px;background:#202228;color:#fff;cursor:pointer;font-size:11px}
+.character-variant-panel>button:hover,.character-variant-list button:hover{border-color:rgba(255,255,255,.25)}
+.character-variant-list{display:grid;gap:7px;margin-top:8px}.character-variant-list span{color:#777d89;font-size:11px}
