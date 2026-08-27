@@ -1,0 +1,6 @@
+.character-parts-panel{margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)}
+.character-parts-title{margin-bottom:10px;color:#aeb3bf;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.character-parts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.character-parts-grid label{display:flex;flex-direction:column;gap:4px;color:#aeb3bf;font-size:10px}
+.character-parts-grid input{width:100%;box-sizing:border-box;border:1px solid rgba(255,255,255,.08);border-radius:5px;padding:6px;background:#202228;color:#fff;font-size:11px}
+.character-parts-grid input:focus{outline:none;border-color:#2d6cdf}
